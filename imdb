@@ -1,3 +1,12 @@
+import requests
+from bs4 import BeautifulSoup
+import time
+
+
+
+soup = BeautifulSoup(response.text, 'html.parser')
+movie_containers = soup.find_all('div', class_ = 'lister-item mode-advanced')
+
 # Redeclaring the lists to store data in
 names = []
 years = []
