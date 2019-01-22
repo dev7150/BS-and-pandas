@@ -52,5 +52,6 @@ test_df = pd.DataFrame({'movie': names,
                         'votes' : votes
 })
 pd.set_option('display.max_columns', None)
+pd.set_option('display.expand_frame_repr', False)
 
 print(test_df)
