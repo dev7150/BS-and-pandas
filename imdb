@@ -1,0 +1,56 @@
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+
+response = requests.get("https://www.imdb.com/search/title?release_date=2017&sort=num_votes,desc&page=2&ref_=adv_nxt")
+
+soup = BeautifulSoup(response.text, 'html.parser')
+movie_containers = soup.find_all('div', class_ = 'lister-item mode-advanced')
+# Lists to store the scraped data in
+names = []
+years = []
+imdb_ratings = []
+metascores = []
+votes = []
+
+# Extract data from individual movie container
+for container in movie_containers:
+
+    # If the movie has Metascore, then extract:
+    if container.find('div', class_ = 'ratings-metascore') is not None:
+
+        # The name
+        name = container.h3.a.text
+        names.append(name)
+
+        # The year
+        year = container.h3.find('span', class_ = 'lister-item-year').text
+        years.append(year)
+
+        # The IMDB rating
+        imdb = float(container.strong.text)
+        imdb_ratings.append(imdb)
+
+        # The Metascore
+        m_score = container.find('span', class_ = 'metascore').text
+        metascores.append(int(m_score))
+
+        # The number of votes
+        vote = container.find('span', attrs = {'name':'nv'})['data-value']
+        votes.append(int(vote))
+        
+#print(names)
+#print(years)
+#print(imdb_ratings)
+#print(metascores)
+#print(votes)
+
+test_df = pd.DataFrame({'movie': names,
+                        'year' : years,
+                        'imdb' : imdb_ratings,
+                        'metascores': metascores,
+                        'votes' : votes
+})
+pd.set_option('display.max_columns', None)
+
+print(test_df)
