@@ -1,2 +1,2 @@
-# BS-and-pandas
+# Beautiful Soup-and-pandas
 This is scraper 
